@@ -1,31 +1,33 @@
-﻿
-Shader "Unlit/NewUnlitShader"
+﻿Shader "Unlit/NewUnlitShader"
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
+		_MainTex ("Texture", 2D) = "white" {} // テクスチャの定義・使っていない
 	}
 	SubShader
 	{
 		Tags {
-            		"Queue"="Transparent"
-            		"RenderType"="Transparent"
+            		"RenderType"="Transparent"  // アルファチャンネルを使うための設定
+            		"Queue"="Transparent"       // 半透明部分の描画順
 		}
 
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend SrcAlpha OneMinusSrcAlpha // アルファチャンネルを使うための設定
+
 		LOD 100
 
 		Pass
 		{
 			CGPROGRAM
-			#pragma vertex vert
-			#pragma fragment frag
-            		#pragma geometry geom
+			#pragma vertex vert    // 頂点シェーダ
+            		#pragma geometry geom  // ジオメトリシェーダ
+			#pragma fragment frag  // フラグメントシェーダ
 
 			// make fog work
-			#pragma multi_compile_fog
+			#pragma multi_compile_fog // 使っていない？
 			
-			#include "UnityCG.cginc"
+			#include "UnityCG.cginc" // ライブラリの宣言
+
+			// float3を引数に取って乱数(0-1)を返す。引数が同一の場合、同じ数字が帰る（いわゆる疑似乱数）
 			float rand(float3 co)
 			{
 				return frac(sin(dot(co.xyz, float3(12.9898, 78.233, 56.787))) * 43758.5453);
@@ -57,12 +59,14 @@ Shader "Unlit/NewUnlitShader"
 				float2 uv;
 				uv = o.uv;
 
+				// 乱数を複数用意する
 				float r5  = rand(v.vertex + 4) * 3.14159 * 2;
 				float r0 = rand(v.vertex + 0) * 3.14159 * 2 + _Time.y / r5;
 				float r1 = rand(v.vertex + 1) * 3.14159 * 2 + _Time.y;
 				float r2 = rand(v.vertex + 2) * 3.14159 * 2 + _Time.y;
 				float r3 = rand(v.vertex + 3) * 3.14159 * 2 + _Time.y;
 
+				// ドーナツ状になるように配置する
 				o.vertex.x = cos(r0) /2 * (1 + sin(r2) / 5);
 				o.vertex.z = sin(r0) /2 * (1 + sin(r2) / 5);
 				o.vertex.y = sin(r1)/ 5;
@@ -73,12 +77,15 @@ Shader "Unlit/NewUnlitShader"
 				o.vertex.x *= 1 - pow(sin(r1)/2.5, 2);
 				o.vertex.z *= 1 - pow(sin(r1)/2.5, 2);
 
+				// 色を決める
 				o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + r5) / 2 + 0.5, 0);
 
 				return o;
 			}
 			
 			
+			// ジオメトリシェーダ
+
 			[maxvertexcount(3)]
 
 			void geom(point appdata p[1], inout TriangleStream<v2f> stream){
@@ -104,29 +111,13 @@ Shader "Unlit/NewUnlitShader"
 
 			fixed4 frag (v2f i) : SV_Target
 			{
+				// 三角形を円にする
 				clip(0.5 - length(i.uv));
+				// フチ部分をアルファチャンネルでぼかす
 				return float4(i.color.xyz, smoothstep(0.5, 0.1, length(i.uv)));
-				return smoothstep(0.5, 0.4, length(i.uv));
 			}
 
 			ENDCG
 		}
-/*
-CGPROGRAM
-#pragma surface surf Lambert
-
-sampler2D _MainTex;
-
-struct Input 
-{
-    float4 color : COLOR;
-};
-
-void surf(Input IN, inout SurfaceOutput o)
-{
-    o = IN;
-}
-ENDCG
-*/
 	}
 }
