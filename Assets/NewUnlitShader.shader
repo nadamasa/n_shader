@@ -61,7 +61,7 @@
 
 				// 乱数を複数用意する
 				float r5  = rand(v.vertex + 4) * 3.14159 * 2;
-				float r0 = rand(v.vertex + 0) * 3.14159 * 2 + _Time.y / r5;
+				float r0 = rand(v.vertex + 0) * 3.14159 * 2 + _Time.y / (1 + r5);
 				float r1 = rand(v.vertex + 1) * 3.14159 * 2 + _Time.y;
 				float r2 = rand(v.vertex + 2) * 3.14159 * 2 + _Time.y;
 				float r3 = rand(v.vertex + 3) * 3.14159 * 2 + _Time.y;
@@ -111,8 +111,12 @@
 
 			fixed4 frag (v2f i) : SV_Target
 			{
+				float len = length(i.uv);
+				float smooth = smoothstep(0.5, 0.1, len);
+
 				// 三角形を円にする
-				clip(0.5 - length(i.uv));
+				clip(0.5 - len);
+				i.color.xyz = min(1, i.color.xyz + (1 - mul(len, 2.2)));
 				// フチ部分をアルファチャンネルでぼかす
 				return float4(i.color.xyz, smoothstep(0.5, 0.1, length(i.uv)));
 			}
