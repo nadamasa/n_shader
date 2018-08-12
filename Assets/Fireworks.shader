@@ -35,6 +35,11 @@
 				return a - floor(a / b) * b;
 			}
 
+			float mod1(float a)
+			{
+				return a - floor(a);
+            }
+
 			float3x3 rotate(float3 a) // angle.xyz in radian
 			{
 			    return float3x3(
@@ -78,21 +83,27 @@
 
 				// 乱数を複数用意する
 				float r5  = rand(v.vertex + 4) * 3.14159 * 2;
-				float r0 = rand(v.vertex + 0) * 3.14159 * 2 + _Time.y / (1 + r5); // 粒子によって違う速度を出している
-				float r1 = rand(v.vertex + 1) * 3.14159 * 2 + _Time.y;
-				float r2 = rand(v.vertex + 2) * 3.14159 * 2 + _Time.y;
-				float r3 = rand(v.vertex + 3) * 3.14159 * 2 + _Time.y;
-				float r4 = rand(v.vertex + 3) * 3.14159 * 2 + _Time.y;
+
+                float span = _Time.y / 3; // 5秒間隔で演算する
+                float elapse = mod1(span) * 2; // 1スパンの経過
+                float stage = floor(span);
+
+				float r1 = rand(v.vertex + 1 + stage) * 3.14159 * 2;
+				float r2 = rand(v.vertex + 2 + stage) * 3.14159 * 2;
+				float r3 = rand(v.vertex + 3 + stage) * 3.14159 * 2;
+				float r4 = rand(v.vertex + 3 + stage) * 3.14159 * 2 + _Time.y;
 
 				o.vertex.xyz = float3(1, 0, 0);
 				o.vertex.xyz = mul(rotate(float3(r1, r2, r3)), o.vertex.xyz);
 
-				//o.vertex.x *= 1 - pow(sin(r1) / 2.5, 2); // 内外に揺らす
-				//o.vertex.z *= 1 - pow(sin(r1) / 2.5, 2);
+                o.vertex.xz *= elapse;
+                o.vertex.y *= elapse;
+
+                o.vertex.y -= (2 * pow(elapse, 2)) / 2;
 
 				// 頂点の色を決める
 				// 三相コサイン波からRGBを塗る
-				o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + r5) / 2 + 0.5, 0);
+				o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + span) / 2 + 0.5, 0);
 
 				return o;
 			}
