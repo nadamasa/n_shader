@@ -83,33 +83,87 @@
                 float2 uv;
 
                 // 乱数を複数用意する
-                // float r5  = rand(v.vertex + 4) * 3.14159 * 2;
 
-                float span = _Time.y / 3; // 5秒間隔で演算する
+                float span = _Time.y / 3.14; // 5秒間隔で演算する
                 float elapse = mod1(span) * 1.5; // 1スパンの経過
                 float stage = floor(span);
 
-                float r0 = rand(stage) * 3.14159 * 2;
-                float r1 = rand(v.vertex + 1 + stage) * 3.14159 * 2;
-                float r2 = rand(v.vertex + 2 + stage) * 3.14159 * 2;
-                float r3 = rand(v.vertex + 3 + stage) * 3.14159 * 2;
-                float r4 = rand(4 + stage);
-                float r5 = rand(5 + stage);
-                float r6 = rand(6 + stage);
-                float r7 = rand(stage + 1) * 3.14159 * 2;
+                float rand0 = rand(stage) * 3.14159 * 2;
+                float rand1 = rand(v.vertex + 1 + stage) * 3.14159 * 2;
+                float rand2 = rand(v.vertex + 2 + stage) * 3.14159 * 2;
+                float rand3 = rand(v.vertex + 3 + stage) * 3.14159 * 2;
+                float rand4 = rand(4 + stage);
+                float rand5 = rand(5 + stage);
+                float rand6 = rand(6 + stage);
+                float rand7 = rand(stage + 1) * 3.14159 * 2;
+                float rand8 = rand(v.vertex + 8 + stage);
+                float rand9 = rand(v.vertex + 8 + stage);
 
 
-                if(v.vertex.x > 0.1 && v.vertex.x < 0.2){
+
+                //if(v.vertex.x > 0.1 && v.vertex.x < 0.2){
+                if(rand8 > 0.1 && rand8 < 0.2){
                     // 初期ベクトル
-                    o.vertex.xyz = float3((1 + r1 / 50) ,0 ,0 );
+                    o.vertex.xyz = float3((1 + rand1 / 50) ,0 ,0 );
                     // 頂点の色を決める
                     // 三相コサイン波からRGBを塗る
-                    o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + r0) / 2 + 0.5, 0);
+                    o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + rand0 + rand9 / 2) / 2 + 0.5, 0);
                 
-                }else if(v.vertex.x > 0.2 && v.vertex.x < 0.3){
+                }else if(rand8 > 0.2 && rand8 < 0.3){
                     // 初期ベクトル
-                    o.vertex.xyz = float3(0.5 + r1 / 50, r4 / 20, r5 / 20);
-                    o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + r7) / 2 + 0.5, 0);
+                    o.vertex.xyz = float3(0.5 + rand1 / 50, rand4 / 20, rand5 / 20);
+                    o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + rand0 + 3.14 + rand9 / 2) / 2 + 0.5, 0);
+                }else if(rand8 > 0.3 && rand8 < 0.4){
+                    span = _Time.y / 2.53; // 5秒間隔で演算する
+                    elapse = mod1(span) * 1.5; // 1スパンの経過
+                    stage = floor(span);
+
+                    rand0 = rand(stage) * 3.14159 * 2;
+                    rand1 = rand(v.vertex + 1 + stage) * 3.14159 * 2;
+                    rand2 = rand(v.vertex + 2 + stage) * 3.14159 * 2;
+                    rand3 = rand(v.vertex + 3 + stage) * 3.14159 * 2;
+                    rand4 = rand(4 + stage);
+                    rand5 = rand(5 + stage);
+                    rand6 = rand(6 + stage);
+                    rand7 = rand(stage + 1) * 3.14159 * 2;
+                    rand8 = rand(v.vertex + 8 + stage);
+                    rand9 = rand(v.vertex + 8 + stage);
+                    o.vertex.xyz = float3(0.5 + rand1 / 50, rand4 / 20, rand5 / 20);
+                    o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + rand0 + 3.14 + rand9 / 2) / 2 + 0.5, 0);
+                }else if(rand8 > 0.4 && rand8 < 0.5){
+                    span = _Time.y / 4.1; // 5秒間隔で演算する
+                    elapse = mod1(span) * 1.5; // 1スパンの経過
+                    stage = floor(span);
+
+                    rand0 = rand(stage) * 3.14159 * 2;
+                    rand1 = rand(v.vertex + 1 + stage) * 3.14159 * 2;
+                    rand2 = rand(v.vertex + 2 + stage) * 3.14159 * 2;
+                    rand3 = rand(v.vertex + 3 + stage) * 3.14159 * 2;
+                    rand4 = rand(4 + stage);
+                    rand5 = rand(5 + stage);
+                    rand6 = rand(6 + stage);
+                    rand7 = rand(stage + 1) * 3.14159 * 2;
+                    rand8 = rand(v.vertex + 8 + stage);
+                    rand9 = rand(v.vertex + 8 + stage);
+                    o.vertex.xyz = float3(0.5 + rand1 / 50, rand4 / 20, rand5 / 20);
+                    o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + rand0 + 3.14 + rand9 / 2) / 2 + 0.5, 0);
+                }else if(rand8 > 0.5 && rand8 < 0.6){
+                    span = _Time.y / 5.13; // 5秒間隔で演算する
+                    elapse = mod1(span) * 1.5; // 1スパンの経過
+                    stage = floor(span);
+
+                    rand0 = rand(stage) * 3.14159 * 2;
+                    rand1 = rand(v.vertex + 1 + stage) * 3.14159 * 2;
+                    rand2 = rand(v.vertex + 2 + stage) * 3.14159 * 2;
+                    rand3 = rand(v.vertex + 3 + stage) * 3.14159 * 2;
+                    rand4 = rand(4 + stage);
+                    rand5 = rand(5 + stage);
+                    rand6 = rand(6 + stage);
+                    rand7 = rand(stage + 1) * 3.14159 * 2;
+                    rand8 = rand(v.vertex + 8 + stage);
+                    rand9 = rand(v.vertex + 8 + stage);
+                    o.vertex.xyz = float3(0.3 + rand1 / 50, rand4 / 20, rand5 / 20);
+                    o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + rand0 + 3.14 + rand9 / 2) / 2 + 0.5, 0);
                 }else{
                     o.vertex.xyz = float3(-10000,-10000,0);
                     o.color = (0,0,0,0);
@@ -117,16 +171,16 @@
 
 
                 // ランダムに回転させる
-                o.vertex.xyz = mul(rotate(float3(r1, r2, r3)), o.vertex.xyz);
+                o.vertex.xyz = mul(rotate(float3(rand1, rand2, rand3)), o.vertex.xyz);
 
-                //o.vertex.y   *= 1.5; // 初速
+                // ベクトルに沿って移動させるが、経過時間が長いと減速する
                 o.vertex.xyz *= elapse * pow(0.98, elapse * 10);
 
-                o.vertex.y += 2; // 高めに表示
+                // o.vertex.y += 2; // 高めに表示
                 o.vertex.y -= (0.7 * pow(elapse, 2)) / 2; // 重力に従って落ちる
 
                 // 位置をずらす
-                o.vertex.xyz += float3(r4, r5, r6);
+                o.vertex.xyz += float3(rand4, rand5, rand6);
 
 
 
