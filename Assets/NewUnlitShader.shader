@@ -73,6 +73,9 @@
 				// 三相コサイン波からRGBを塗る
 				o.color = float4(cos(float3(-1, 1, 0) * 3.14 * 2 / 3 + r5) / 2 + 0.5, 0);
 
+				// ビュー座標に座標変換(塗ったポリゴンがカメラを向くように)
+				o.vertex = mul(UNITY_MATRIX_MV, o.vertex);
+
 				return o;
 			}
 			
@@ -86,12 +89,10 @@
 
 				// 頂点情報取得
 				appdata v = p[0];
+                float4 vp = v.vertex;
 
 				// 色を引き継ぐ
 				o.color = v.color;
-
-				// ビュー座標に座標変換(塗ったポリゴンがカメラを向くように)
-				float4 vp = mul(UNITY_MATRIX_MV, v.vertex);
 
 				// 三角ポリゴンのサイズ
 				float sz = 0.002 * 5;
